@@ -30,7 +30,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,13 +68,17 @@ class MainActivity : ComponentActivity() {
  */
 @Composable
 fun WoofApp() {
-    LazyColumn {
-        items(dogs) {
-            DogItem(
-                dog = it,
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_small))
-            )
+    Scaffold(
+        topBar = { WoofAppTopBar() }
+    ) { padding ->
+        LazyColumn(contentPadding = padding) {
+            items(dogs) {
+                DogItem(
+                    dog = it,
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_small))
+                )
+            }
         }
     }
 }
@@ -141,12 +147,35 @@ fun DogInformation(
     Column(modifier = modifier) {
         Text(
             text = stringResource(dogName),
+            style = MaterialTheme.typography.displayMedium,
             modifier = Modifier.padding(top = dimensionResource(id = R.dimen.padding_small))
         )
         Text(
             text = stringResource(R.string.years_old, dogAge),
+            style = MaterialTheme.typography.bodyLarge
         )
     }
+}
+
+@Composable
+fun WoofAppTopBar(modifier: Modifier = Modifier) {
+    CenterAlignedTopAppBar(
+        title = {
+            Row{
+                Image(
+                    modifier = Modifier
+                        .size(dimensionResource(R.dimen.image_size))
+                        .padding(dimensionResource(R.dimen.padding_small)),
+                    painter = painterResource(R.drawable.ic_woof_logo),
+                    contentDescription = null
+                )
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.displayLarge
+                )
+            }
+        }, modifier = modifier
+    )
 }
 
 /**
@@ -155,7 +184,7 @@ fun DogInformation(
 @Preview (showBackground = true, showSystemUi = true)
 @Composable
 fun WoofPreview() {
-    WoofTheme(darkTheme = true) {
+    WoofTheme(darkTheme = false) {
         WoofApp()
     }
 }
